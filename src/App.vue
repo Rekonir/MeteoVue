@@ -37,6 +37,7 @@ onMounted(getWeather);
                     type="text"
                     class="search"
                     @keyup.enter="getWeather"
+                    v-on:blur="getWeather"
                   />
                 </div>
                 <WeatherSummary v-if="!isError" :weatherInfo="weatherInfo" />
