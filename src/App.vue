@@ -39,7 +39,7 @@ onMounted(getWeather);
               </div>
             </section>
             <section class="section section-right">
-              <Highlight />
+              <Highlight :weatherInfo="weatherInfo"/>
             </section>
           </div>
           <div v-if="weatherInfo?.weather" class="sections">
