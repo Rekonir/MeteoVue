@@ -1,5 +1,5 @@
 <template>
-  <div class="section highlights">
+  <div v-if="weatherInfo?.weather" class="section highlights">
     <div class="title">Today's Highlights</div>
     <div class="highlights-wrapper">
       <div class="highlight">
@@ -23,7 +23,9 @@
           <div class="card-small-title">Wind gusts</div>
           <div class="card-small-info">
             <div class="card-small-data">
-              <div class="info-main-num">{{ weatherInfo?.wind.gust }}</div>
+              <div v-if="weatherInfo?.wind?.gust" class="info-main-num">
+                {{ weatherInfo?.wind?.gust.toFixed(1) }}
+              </div>
               <div class="info-main-text">m/s</div>
             </div>
             <div class="card-small-hint">
@@ -49,7 +51,7 @@
             <div class="card-centered">
               <div class="info-main">
                 <div class="info-main-num">
-                  {{ weatherInfo?.main.pressure }}
+                  {{ getPressureMm(weatherInfo?.main?.pressure) }}
                 </div>
                 <div class="info-main-text">mm</div>
               </div>
@@ -61,7 +63,7 @@
           <div class="card-small-info">
             <div class="card-small-data">
               <div class="info-main-num">
-                {{ Math.round(weatherInfo?.main.feels_like) }}
+                {{ Math.round(weatherInfo?.main?.feels_like) }}
               </div>
               <div class="info-main-text">°C</div>
             </div>
@@ -84,14 +86,14 @@
                 <div class="state-pic"></div>
                 <div class="state-title">Sunrise</div>
                 <div class="state-time">
-                  {{ msToTime(weatherInfo?.sys.sunrise) }}
+                  {{ sunriseTime }}
                 </div>
               </div>
               <div class="state">
                 <div class="state-pic state-pic--flipped"></div>
                 <div class="state-title">Sunset</div>
                 <div class="state-time">
-                  {{ msToTime(weatherInfo?.sys.sunset) }}
+                  {{ sunsetTime }}
                 </div>
               </div>
             </div>
@@ -118,12 +120,21 @@
 </template>
 
 <script setup>
-import { msToTime } from "../utils/index.js";
+import { computed } from "vue";
+import { getTime, getPressureMm } from "../utils/index.js";
+
 const props = defineProps({
   weatherInfo: {
     type: [Object, null],
     required: true,
   },
+});
+const timezone = computed(() => props.weatherInfo.timezone);
+const sunriseTime = computed(() => {
+  return getTime(props.weatherInfo?.sys?.sunrise + timezone.value);
+});
+const sunsetTime = computed(() => {
+  return getTime(props.weatherInfo?.sys?.sunset + timezone.value);
 });
 </script>
 
