@@ -30,6 +30,23 @@
     padding-right: 0;
   }
 }
+.section-error {
+  min-width: 235px;
+  width: auto;
+  padding-right: 0;
+}
+.error {
+  padding-top: 30px;
+  &-title {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  &-message {
+    padding-top: 10px;
+    font-size: 13px;
+  }
+}
+
 .section-right {
   width: 70%;
   padding-left: 10px;
@@ -46,13 +63,13 @@
   width: 100%;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     right: 10px;
     width: 25px;
     height: 25px;
-    background: url('./assets/img/search.svg') no-repeat 50% 50%;
+    background: url("./assets/img/search.svg") no-repeat 50% 50%;
     background-size: contain;
     transform: translateY(50%);
     cursor: pointer;
@@ -61,14 +78,14 @@
 .info {
   height: 100%;
   padding: 16px;
-  background: url('./assets/img/gradient-1.jpg') no-repeat 50% 50%;
+  background: url("./assets/img/gradient-1.jpg") no-repeat 50% 50%;
   background-size: cover;
   border-radius: 25px;
 }
 .search {
   width: 100%;
   padding: 16px;
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: "Inter", Arial, sans-serif;
   color: $white;
   background-color: rgba(0, 0, 0, 0.75);
   border-radius: 16px;

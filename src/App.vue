@@ -5,10 +5,12 @@ import Coords from "/src/components/Coords.vue";
 import Humidity from "/src/components/Humidity.vue";
 
 import { API_KEY, BASE_URL } from "../src/constants/index.js";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
+import { capitalizeFirstLetter } from "./utils";
 
 const city = ref("Bryansk");
 const weatherInfo = ref(null);
+const isError = computed(() => weatherInfo.value?.cod !== 200);
 
 const getWeather = () => {
   fetch(`${BASE_URL}?q=${city.value}&units=metric&appid=${API_KEY}`)
@@ -25,7 +27,9 @@ onMounted(getWeather);
       <div class="container">
         <div class="laptop">
           <div class="sections">
-            <section class="section section-left">
+            <section
+              :class="['section', 'section-left', { 'section-error': isError }]"
+            >
               <div class="info">
                 <div class="city-inner">
                   <input
@@ -35,16 +39,22 @@ onMounted(getWeather);
                     @keyup.enter="getWeather"
                   />
                 </div>
-                <WeatherSummary :weatherInfo="weatherInfo" />
+                <WeatherSummary v-if="!isError" :weatherInfo="weatherInfo" />
+                <div v-else class="error">
+                  <div class="error-title">Oooops! Something went wrong</div>
+                  <div v-if="weatherInfo?.message" class="error-message">
+                    {{ capitalizeFirstLetter(weatherInfo?.message) }}
+                  </div>
+                </div>
               </div>
             </section>
-            <section class="section section-right">
-              <Highlight :weatherInfo="weatherInfo"/>
+            <section v-if="!isError" class="section section-right">
+              <Highlight :weatherInfo="weatherInfo" />
             </section>
           </div>
-          <div v-if="weatherInfo?.weather" class="sections">
-            <Coords :coord="weatherInfo.coord"/>
-            <Humidity :humidity="weatherInfo.main.humidity"/>
+          <div v-if="!isError" class="sections">
+            <Coords :coord="weatherInfo.coord" />
+            <Humidity :humidity="weatherInfo.main.humidity" />
           </div>
         </div>
       </div>
